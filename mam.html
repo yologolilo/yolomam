@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Пиксельный Подарок для Мамы</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  <style>
+    /* Сброс стилей */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    /* Динамический фон и базовые стили */
+    body {
+      font-family: 'Press Start 2P', cursive;
+      animation: backgroundChange 10s infinite alternate;
+      color: #fff;
+      text-align: center;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+    @keyframes backgroundChange {
+      0% { background: linear-gradient(135deg, #ff99cc, #ff66b2); }
+      50% { background: linear-gradient(135deg, #ff66b2, #ff99cc); }
+      100% { background: linear-gradient(135deg, #ff99cc, #ff66b2); }
+    }
+    h1, h2, p {
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    /* Плавное появление контента */
+    .container {
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* Стили кнопок */
+    .button {
+      background: linear-gradient(45deg, #ff4d6d, #ff7a7a);
+      border: none;
+      color: #fff;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 20px;
+    }
+    .button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    }
+    /* Пульсирующее сердце */
+    .pixel-heart {
+      width: 120px;
+      height: 120px;
+      background: url('heart.png') no-repeat center/contain;
+      margin: 20px auto;
+      animation: pulse 1s infinite alternate;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.2); }
+    }
+    /* Эффект падающих цветов (партиклы) */
+    #fallingFlowers {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+    .flower {
+      position: absolute;
+      top: -50px;
+      width: 30px;
+      height: 30px;
+      animation: fall 5s linear infinite;
+    }
+    @keyframes fall {
+      to { transform: translateY(110vh); }
+    }
+    /* Стили этапов */
+    .step {
+      padding: 20px;
+      margin-top: 30px;
+    }
+    .hidden {
+      display: none;
+    }
+    /* Стили для мини-игры */
+    #gameArea {
+      position: relative;
+      width: 100%;
+      height: 50vh;
+      margin-top: 20px;
+    }
+    .character {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-size: cover;
+      transition: left 0.5s ease-in-out;
+    }
+    /* Исходные позиции котят */
+    #player {
+      bottom: 10px;
+      left: 20%;
+      background-image: url('kitten1.png');
+    }
+    #opponent {
+      top: 10px;
+      left: 60%;
+      background-image: url('kitten2.png');
+    }
+    /* Анимация "поцелуя" */
+    .kissed {
+      animation: kissAnimation 0.5s ease-in-out;
+    }
+    @keyframes kissAnimation {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); opacity: 0.6; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    /* Анимация текста */
+    .text-animate {
+      animation: textFadeIn 1.5s forwards;
+    }
+    @keyframes textFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Эффект тряски */
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+    /* Анимация букета */
+    #bouquet {
+      margin: 20px auto;
+      width: 200px;
+      opacity: 0;
+      transform: translateY(-50px) scale(0.5);
+      animation: bouquetAnimation 1s forwards;
+    }
+    @keyframes bouquetAnimation {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    /* Стили для слайд-шоу */
+    #slideshow-container {
+      position: relative;
+      margin: 20px auto;
+      max-width: 500px;
+    }
+    .slide {
+      width: 100%;
+      border-radius: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Эффект падающих цветов -->
+  <div id="fallingFlowers" class="hidden"></div>
+  
+  <!-- Основной контент -->
+  <div id="content" class="container">
+    <!-- Приветственный экран для мамы -->
+    <div id="intro" class="step">
+      <h1 class="text-animate">С 8 Марта, мамочка!</h1>
+      <div class="pixel-heart"></div>
+      <p class="text-animate">
+        Ты самая заботливая, добрая и мудрая мама на свете!
+        Твоя любовь вдохновляет нас каждый день. Давай начнем этот волшебный квест который я сделал для тебя!
+      </p>
+      <button class="button" id="startQuestBtn">Начать квест</button>
+    </div>
+    
+    <!-- Этап 1: Введи дату, когда ты стала мамой -->
+    <div id="step1" class="step hidden">
+      <h2>Введи дату, когда ты стала мамой</h2>
+      <input type="text" id="dateInput" placeholder="ДД.ММ.ГГГГ" style="padding: 10px; font-size: 16px;">
+      <br>
+      <!-- Пример: правильная дата 23.06.2002 (замените при необходимости) -->
+      <button class="button" onclick="checkDate()">Подтвердить</button>
+    </div>
+    
+    <!-- Этап 2: Мини-игра: Котята целуются и сближаются -->
+    <div id="step2" class="step hidden">
+      <h2>Мини-игра: Котята целуются и сближаются!</h2>
+      <div id="gameArea">
+        <div id="player" class="character"></div>
+        <div id="opponent" class="character"></div>
+      </div>
+      <p id="gameMessage" class="text-animate">
+        Нажимай "Поцеловать!", чтобы наши милые котята сближались – как твоя любовь объединяет нашу семью!
+      </p>
+      <button class="button" id="kissBtn">Поцеловать!</button>
+    </div>
+    
+    <!-- Этап 3: Финальное поздравление с букетом и комплиментами -->
+    <div id="step3" class="step hidden">
+      <h2>Ты победила, мамочка!</h2>
+      <p class="text-animate">
+        Наши котята встретились, символизируя, как твоя любовь объединила нашу семью.
+        Ты — наша опора, вдохновение и самая лучшая мама!
+      </p>
+      <!-- Анимация букета -->
+      <div id="bouquet">
+        <img src="bouquet.png" alt="Букет" style="width: 100%;">
+      </div>
+      <p class="text-animate">
+        Пусть этот букет символизирует всю нашу любовь и благодарность тебе!
+      </p>
+      <button class="button" onclick="goToSlideshow()">Посмотреть какая у нас красивая мама!</button>
+    </div>
+    
+    <!-- Этап 4: Слайд-шоу с фотографиями -->
+    <div id="step5" class="step hidden">
+      <h2 class="text-animate">НАША МАМА КРАСОТКА</h2>
+      <div id="slideshow-container">
+        <img class="slide" src="photo1.jpg" alt="Фото 1">
+        <img class="slide" src="photo2.jpg" alt="Фото 2">
+        <img class="slide" src="photo3.jpg" alt="Фото 3">
+        <img class="slide" src="photo4.jpg" alt="Фото 4">
+        <img class="slide" src="photo5.jpg" alt="Фото 5">
+        <!-- Добавьте ещё фото при необходимости -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Фоновая музыка и кнопка управления -->
+  <audio id="bgMusic" loop>
+    <source src="backgroundMusic.mp3" type="audio/mp3">
+  </audio>
+  <button id="toggleMusicBtn" class="button" style="position: fixed; top: 10px; right: 10px;">Музыка</button>
+  
+  <script>
+    // Управление фоновой музыкой
+    const bgMusic = document.getElementById("bgMusic");
+    document.getElementById("toggleMusicBtn").addEventListener("click", function() {
+      if (bgMusic.paused) {
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
+      }
+    });
+    
+    // Запуск квеста: падающие цветы и переход на этап 1
+    const startQuestBtn = document.getElementById("startQuestBtn");
+    startQuestBtn.addEventListener("click", function() {
+      document.getElementById("fallingFlowers").classList.remove("hidden");
+      generateFlowers();
+      document.getElementById("intro").classList.add("hidden");
+      document.getElementById("step1").classList.remove("hidden");
+      bgMusic.play();
+    });
+    
+    // Функция генерации падающих цветов
+    function generateFlowers() {
+      const container = document.getElementById("fallingFlowers");
+      container.innerHTML = "";
+      for (let i = 0; i < 50; i++) {
+        const flower = document.createElement("img");
+        flower.src = "flower.png"; // Укажите путь к изображению цветка
+        flower.classList.add("flower");
+        flower.style.left = Math.random() * 100 + "vw";
+        flower.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        container.appendChild(flower);
+      }
+    }
+    
+    // Проверка введённой даты (правильная: 15.03.1995, замените по необходимости)
+    function checkDate() {
+      const inputDate = document.getElementById("dateInput").value;
+      const correctDate = "23.06.2002";
+      if (inputDate === correctDate) {
+        document.getElementById("step1").classList.add("hidden");
+        document.getElementById("step2").classList.remove("hidden");
+      } else {
+        const dateInput = document.getElementById("dateInput");
+        dateInput.classList.add("shake");
+        setTimeout(() => dateInput.classList.remove("shake"), 500);
+      }
+    }
+    
+    // Логика мини-игры: котята сближаются при каждом поцелуе
+    let kissesCount = 0;
+    const maxKisses = 4;  // После 4 поцелуев котята встретятся
+    let playerPos = 20;   // Исходное положение левого котёнка (%)
+    let opponentPos = 60; // Исходное положение правого котёнка (%)
+    
+    const kissBtn = document.getElementById("kissBtn");
+    kissBtn.addEventListener("click", function() {
+      kissesCount++;
+      const increment = 5;  // Сдвиг на 5% при каждом поцелуе
+      playerPos += increment;
+      opponentPos -= increment;
+      
+      // Обновляем позиции котят
+      document.getElementById("player").style.left = playerPos + "%";
+      document.getElementById("opponent").style.left = opponentPos + "%";
+      
+      // Запускаем анимацию поцелуя
+      document.getElementById("player").classList.add("kissed");
+      document.getElementById("opponent").classList.add("kissed");
+      setTimeout(() => {
+        document.getElementById("player").classList.remove("kissed");
+        document.getElementById("opponent").classList.remove("kissed");
+      }, 500);
+      
+      const gameMessage = document.getElementById("gameMessage");
+      if (kissesCount < maxKisses) {
+        gameMessage.textContent = `Ты обнимаешь котёнка! Осталось поцелуев: ${maxKisses - kissesCount}`;
+      } else {
+        gameMessage.textContent = "Наши котята встретились... Ты победила!";
+        setTimeout(() => {
+          document.getElementById("step2").classList.add("hidden");
+          document.getElementById("step3").classList.remove("hidden");
+        }, 1000);
+      }
+    });
+    
+    // Переход к слайд-шоу после финального поздравления
+    function goToSlideshow() {
+      document.getElementById("step3").classList.add("hidden");
+      document.getElementById("step5").classList.remove("hidden");
+      showSlides();
+    }
+    
+    // Запуск слайд-шоу
+    let slideIndex = 0;
+    function showSlides() {
+      let slides = document.getElementsByClassName("slide");
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1; }
+      slides[slideIndex - 1].style.display = "block";
+      setTimeout(showSlides, 3000); // Меняем изображение каждые 3 секунды
+    }
+  </script>
+  
+  <!-- Кнопка перехода к слайд-шоу на финальном экране -->
+  <div id="step3-extra" class="step hidden">
+    <button class="button" onclick="goToSlideshow()">Смотреть наши лучшие моменты</button>
+  </div>
+  
+  <!-- Этап 5: Слайд-шоу с фотографиями -->
+  <div id="step5" class="step hidden">
+    <h2 class="text-animate">Наши лучшие моменты</h2>
+    <div id="slideshow-container">
+      <img class="slide" src="photo1.jpg" alt="Фото 1">
+      <img class="slide" src="photo2.jpg" alt="Фото 2">
+      <img class="slide" src="photo3.jpg" alt="Фото 3">
+      <img class="slide" src="photo4.jpg" alt="Фото 4">
+      <img class="slide" src="photo5.jpg" alt="Фото 5">
+      <!-- Добавьте еще фото, если нужно -->
+    </div>
+  </div>
+</body>
+</html>
